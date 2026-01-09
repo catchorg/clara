@@ -497,6 +497,8 @@ namespace detail {
         auto parse( Args const &args ) const -> InternalParseResult {
             return parse( args.exeName(), TokenStream( args ) );
         }
+
+        bool isHidden() const { return m_hidden; }
     };
 
     template<typename DerivedT>
@@ -865,7 +867,7 @@ namespace detail {
                     }
                     if( !required )
                         os << "]";
-                    if( !p.m_options.empty() )
+                    if( !p.m_options.empty() && !std::all_of(p.m_options.begin(), p.m_options.end(), [](const Opt& opt) { return opt.isHidden(); }) )
                         os << " <options>";
                 };
 
